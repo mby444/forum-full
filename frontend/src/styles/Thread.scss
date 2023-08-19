@@ -1,0 +1,79 @@
+@use "./partials" as *;
+
+.thread-content-container {
+    width: $width-container;
+    height: 120px;
+    border-radius: 5px;
+    background-color: $light-blue;
+    display: flex;
+    font-family: $poppins;
+    box-shadow: 0px 0px 4px 1px #1b223440;
+    margin-bottom: 25px;
+    & .thread-pfp-container {
+        width: 120px;
+        height: 120px;
+        border-radius: 5px;
+        background-color: $white;
+        display: flex;
+        flex-direction: column;
+        & .thread-pfp-name {
+            font-size: 10px;
+            font-style: normal;
+            font-weight: 600;
+            line-height: normal;
+            text-align: center;
+            color: $black;
+            width: 120px;
+            margin: 15px 0 8px 0;
+        }
+
+        & .thread-pfp {
+            width: 120px;
+            height: 60px;
+            background: {
+                image: url("../images/thread-pfp.png");
+                repeat: no-repeat;
+                position: center;
+                size: 60px 60px;
+            }
+        }
+    }
+
+    & .thread-description-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        & .thread-description-title {
+            color: $black;
+            font-size: 12px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: normal;
+            width: $width-container;
+            margin: 15px 0 8px 0;
+        }
+
+        & .thread-description-text {
+            color: #121212cc;
+            font-size: 11px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: normal;
+            width: $width-container;
+            height: 68px;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            line-clamp: 3;
+            -webkit-box-orient: vertical;
+        }
+    }
+
+    & .thread-dot-container {
+        padding: 12px 2px 0 0;
+        & .thread-dot-img {
+            cursor: pointer;
+        }
+    }
+}

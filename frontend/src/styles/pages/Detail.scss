@@ -1,0 +1,78 @@
+@use "../partials" as *;
+
+.detail-body-container {
+    background-color: $white;
+    font-family: $poppins;
+    & .detail-title-container {
+        width: 100%;
+        box-sizing: border-box;
+        display: flex;
+        padding: 0 38px 0 38px;
+        & .detail-title {
+            font-size: 20px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: normal;
+            color: $black;
+            padding: 40px 0 55px 0;
+        }
+    }
+
+    & .detail-text-container {
+        width: 100%;
+        box-sizing: border-box;
+        display: flex;
+        padding: 0 38px 25px 38px;
+        & .detail-text {
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: normal;
+            color: $black;
+        }
+    }
+
+    & .detail-thumb-container {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        padding: 25px 0 35px 0;
+        & .detail-thumb-up-container {
+            padding: 0 50px 0 0;
+            & .detail-thumb-up-icon {
+                width: 40px;
+                height: 40px;
+                cursor: pointer;
+                background: {
+                    image: url("../../images/thumb-up.svg");
+                    size: 100% 100%;
+                    position: center;
+                }
+            }
+
+            & .detail-thumb-up-text {
+                padding: 5px 0 0 0;
+                text-align: center;
+            }
+        }
+
+        & .detail-thumb-down-container {
+            & .detail-thumb-down-icon {
+                padding: 0 0 0 50px;
+                width: 40px;
+                height: 40px;
+                cursor: pointer;
+                background: {
+                    image: url("../../images/thumb-down.svg");
+                    size: 100% 100%;
+                    position: center;
+                }
+            }
+
+            & .detail-thumb-down-text {
+                padding: 5px 0 0 0;
+                text-align: center;
+            }
+        }
+    }
+}

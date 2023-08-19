@@ -1,0 +1,21 @@
+@use "./partials" as *;
+@use "./Navbar.scss";
+@use "./Search.scss";
+@use "./Thread.scss";
+@use "./PenBtn.scss";
+@use "./pages";
+@use "./Footer.scss";
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: $poppins;
+  background-color: $white;
+}
+
+.hidden {
+  display: none;
+}

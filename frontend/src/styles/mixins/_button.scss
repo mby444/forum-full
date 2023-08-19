@@ -1,0 +1,20 @@
+@use "../partials/font" as *;
+
+@mixin signBtn($text-color, $bg-color) {
+    color: $text-color;
+    background-color: $bg-color;
+    box-sizing: border-box;
+    width: 80px;
+    height: 30px;
+    flex-shrink: 0;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    font-family: $poppins;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}

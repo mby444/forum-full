@@ -1,0 +1,37 @@
+@use "./partials" as *;
+
+.search-input-container {
+    display: flex;
+    width: 300px;
+    height: 40px;
+    border-radius: 50px;
+    background-color: #FFF;
+    box-shadow: 2px 2px 2px 1px rgba(255, 255, 255, 0.25) inset;
+    & .search-input {
+        display: block;
+        // box-shadow: 2px 2px 2px 1px #ffffff40 inset;
+        width: 260px;
+        background-color: #FFF;
+        border-radius: 50px 0 0 50px;
+        box-sizing: border-box;
+        padding: 0 15px;
+        font-size: 14px;
+        border: none;
+        outline: none;
+        font-family: $poppins;
+    }
+    
+    & .search-btn {
+        background: {
+            image: url("../images/search.svg");
+            color: $black;
+            repeat: no-repeat;
+            position: center;
+            size: 15px 15px;
+        }
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+}

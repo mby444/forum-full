@@ -1,0 +1,19 @@
+@use "./partials" as *;
+
+.footer-container {
+    width: 100%;
+    background-color: $black;
+    height: 48px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    & .footer-text {
+        text-align: center;
+        color: $white;
+        font-family: $poppins;
+        font-size: 11px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+    }
+}
