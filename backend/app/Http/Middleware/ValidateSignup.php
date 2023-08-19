@@ -25,7 +25,7 @@ class ValidateSignup
 
     private function checkExists($column, $value) {
         $member = Member::where($column, $value)->get();
-        return !!$member;
+        return !!count($member);
     }
 
     private function getErrorMessages($email, $name)

@@ -1,5 +1,4 @@
 import useSignupForm from "../../hooks/useSignupForm";
-import { mainAPI } from "../../api/axios";
 
 export default function Signup() {
     const { signupForm, validate, submitForm } = useSignupForm();

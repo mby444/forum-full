@@ -15,9 +15,7 @@ use App\Http\Controllers\SignController;
 |
 */
 
-// Route::post("/signup", [SignController::class, "signup"]);
-Route::middleware("signup")->post("/signup", [SignController::class, "signup"]);
-
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+Route::post("/signup", [SignController::class, "signup"])->middleware("signup");

@@ -1,8 +1,10 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { mainAPI } from "../api/axios";
-import axios from "axios";
 
 export default function useSignupForm() {
+    const navigate = useNavigate();
+
     const [email, setEmail] = useState("");
     const [name, setName] = useState("");
     const [password, setPassword] = useState("");
@@ -84,9 +86,12 @@ export default function useSignupForm() {
         const errorSetters = [setEmailError, setNameError, setPasswordError, setCpasswordError];
         const errorObjKeys = Object.keys(errorObj);
         const inputs = [email, name, password, cpassword];
+        const inputSetters = [setEmail, setName, setPassword, setCpassword];
         for (let i = 0; i < inputs.length; i++) {
-            const [key, value] = [errorObjKeys[i], trimExtraSpace(inputs[i])];
+            const input = inputs[i];
+            const [key, value] = [errorObjKeys[i], trimExtraSpace(input)];
             const errorMessage = errorMessageGenerator[key](value);
+            inputSetters[i](trimExtraSpace(input));
             errorObj[key] = errorMessage;
             errorSetters[i](errorMessage);
         }
@@ -94,10 +99,28 @@ export default function useSignupForm() {
         !isFormError ? callback() : errCallback(errorObj);
     };
 
+    const setPostErrors = (errorData) => {
+        const setterPostError = {
+            email: setEmailError,
+            name: setNameError,
+        };
+        for (let key in errorData) {
+            setterPostError[key](errorData[key]);
+        }
+    };
+
     const submitForm = () => {
-        const payload = { email, name, password };
-        axios.post("http://127.0.0.1:8000/api/signup", payload).then((response) => {
-            console.log(response);
+        const payload = {
+            email: trimExtraSpace(email),
+            name: trimExtraSpace(name),
+            password: trimExtraSpace(password),
+        };
+        mainAPI.post("/api/signup", payload).then((response) => {
+            const { data } = response;
+            const errorData = data?.error;
+            const isError = errorData?.email || errorData?.name;
+            if (isError) return setPostErrors(errorData);
+            navigate("/");
         }).catch((err) => {
             console.log(err);
         });

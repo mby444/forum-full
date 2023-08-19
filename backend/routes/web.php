@@ -17,5 +17,5 @@ use App\Http\Controllers\SignController;
 
 // Route::get('/', [MessageController::class, "index"]);
 Route::get("/", function() {
-    return response()->json(["token" => csrf_token()]);
+    return response()->json([]);
 });
