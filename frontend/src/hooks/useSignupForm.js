@@ -96,14 +96,10 @@ export default function useSignupForm() {
 
     const submitForm = () => {
         const payload = { email, name, password };
-        const config = {
-            headers: {
-                "X-CSRF-TOKEN": "KDRWSckjTSxiVN4uAz6DH7H1wLSh07YME3eWyX3c",
-            },
-        }
-        axios.post("http://127.0.0.1:8000/signup", payload, config)
-        .then((response) => {
-            console.log(response?.data);
+        axios.post("http://127.0.0.1:8000/api/signup", payload).then((response) => {
+            console.log(response);
+        }).catch((err) => {
+            console.log(err);
         });
     };
 

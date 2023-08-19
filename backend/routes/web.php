@@ -19,4 +19,3 @@ use App\Http\Controllers\SignController;
 Route::get("/", function() {
     return response()->json(["token" => csrf_token()]);
 });
-Route::post('/signup', [SignController::class, "signup"]);
