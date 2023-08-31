@@ -19,3 +19,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 Route::post("/signup", [SignController::class, "signup"])->middleware("signup");
+Route::post("/signup/otp", [SignController::class, "signupOtp"])->middleware("signup.otp");

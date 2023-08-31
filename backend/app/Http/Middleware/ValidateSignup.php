@@ -43,8 +43,8 @@ class ValidateSignup
 
     public function handle(Request $request, Closure $next): Response
     {
-        $email = strtolower($request->post("email"));
-        $name = strtolower($request->post("name"));
+        $email = strip_tags(strtolower($request->post("email")));
+        $name = strip_tags(strtolower($request->post("name")));
         $errorMessages = $this->getErrorMessages($email, $name);
         $hasError = $this->countErrorMessages($errorMessages) > 0;
         if ($hasError) {

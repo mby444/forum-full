@@ -1,9 +1,11 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, redirect } from "react-router-dom";
+import { useCookies } from "react-cookie";
 import { mainAPI } from "../api/axios";
 
 export default function useSignupForm() {
     const navigate = useNavigate();
+    const [cookies, setCookie] = useCookies(["otp_email"]);
 
     const [email, setEmail] = useState("");
     const [name, setName] = useState("");
@@ -120,7 +122,10 @@ export default function useSignupForm() {
             const errorData = data?.error;
             const isError = errorData?.email || errorData?.name;
             if (isError) return setPostErrors(errorData);
-            navigate("/");
+            // setCookie(null, "", {
+            //     expires
+            // })
+            window.location.reload();
         }).catch((err) => {
             console.log(err);
         });
