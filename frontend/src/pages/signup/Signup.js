@@ -1,8 +1,6 @@
 import useSignupForm from "../../hooks/useSignupForm";
-import { useCookies } from "react-cookie";
 
 export default function Signup() {
-    const [cookies] = useCookies(["otp_email"]);
     const { signupForm, validate, submitForm } = useSignupForm();
 
     const handleClickBtn = () => {
@@ -10,10 +8,6 @@ export default function Signup() {
             submitForm();
         });
     };
-
-    if (cookies.otp_email) {
-        return <div>{cookies.otp_email}</div>
-    }
 
     return (
         <div className="signup-wrapper">

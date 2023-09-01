@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id()->autoIncrement();
             $table->text("email");
             $table->string("otp", 6);
+            $table->text("expire");
             $table->timestamps();
         });
     }

@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { useNavigate, redirect } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { mainAPI } from "../api/axios";
 
 export default function useSignupForm() {
     const navigate = useNavigate();
-    const [cookies, setCookie] = useCookies(["otp_email"]);
+    const [cookies, setCookie] = useCookies(["temp_user_data"]);
 
     const [email, setEmail] = useState("");
     const [name, setName] = useState("");
@@ -111,21 +111,46 @@ export default function useSignupForm() {
         }
     };
 
+    const getOtp = (len=6) => {
+        const digits = '0123456789';
+        let otp = '';
+        for (let i = 0; i < len; i++ ) {
+            otp += digits[Math.floor(Math.random() * digits.length)];
+        }
+        return otp;
+    };
+
+    const getExpireDate = (seconds) => {
+        const expireDate = new Date();
+        const currentDate = new Date();
+        expireDate.setSeconds(currentDate.getSeconds() + seconds);
+        return expireDate;
+    };
+
+    const saveOtpCookie = (cookie) => {
+        if (!cookie) return;
+        const encCookie = encodeURIComponent(JSON.stringify(cookie));
+        const expireDate = getExpireDate(60 * 15);
+        setCookie("temp_user_data", encCookie, {
+            expires: expireDate
+        });
+    };
+
     const submitForm = () => {
         const payload = {
             email: trimExtraSpace(email),
             name: trimExtraSpace(name),
             password: trimExtraSpace(password),
+            otp: getOtp(6),
+            expire: getExpireDate(60 * 15).toString(),
         };
         mainAPI.post("/api/signup", payload).then((response) => {
             const { data } = response;
             const errorData = data?.error;
             const isError = errorData?.email || errorData?.name;
             if (isError) return setPostErrors(errorData);
-            // setCookie(null, "", {
-            //     expires
-            // })
-            window.location.reload();
+            saveOtpCookie(data?.cookie);
+            navigate("./otp/")
         }).catch((err) => {
             console.log(err);
         });

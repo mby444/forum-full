@@ -5,6 +5,7 @@ import Home from './pages/home/Home';
 import Profile from './pages/profile/Profile';
 import Detail from './pages/detail/Detail';
 import Signup from './pages/signup/Signup';
+import SignupOtp from './pages/signup/SignupOtp';
 import Login from './pages/login/Login';
 import NotFound from './error-pages/NotFound';
 
@@ -21,9 +22,12 @@ function App() {
             <Route path=":detailId" element={<Detail />} />
           </Route>
         </Route>
-        <Route path="signup" element={<Signup />} />
+        <Route path="signup">
+          <Route index element={<Signup />} />
+          <Route path='otp' element={<SignupOtp />} />
+        </Route>
         <Route path="login" element={<Login />} />
-        <Route path=':all' element={<NotFound />} />
+        <Route path='*' element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );

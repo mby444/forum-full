@@ -10,18 +10,25 @@ class SignController extends Controller
 {
     public function signup(Request $request) {
         $email = strip_tags(strtolower($request->post("email")));
-        // $name = strip_tags(strtolower($request->post("name")));
-        // $password = strip_tags(strtolower($request->post("password")));
+        $name = strip_tags(strtolower($request->post("name")));
+        $password = strip_tags(strtolower($request->post("password")));
+        $otp = $request->post("otp");
+        $expire = $request->post("expire");
 
-        // Member::create([
-        //     "email" => $email,
-        //     "name" => $name,
-        //     "password" => $password,
-        // ]);
+        Otp::updateOrCreate(["email" => $email], [
+            "email" => $email,
+            "otp" => $otp,
+            "expire" => $expire,
+        ]);
 
         return response()->json([
             "error" => null,
-        ])->cookie("otp_email", $email, 15);
+            "cookie" => [
+                "email" => $email,
+                "name" => $name,
+                "password" => $password,
+            ],
+        ]);
     }
 
     public function signupOtp(Request $request) {
