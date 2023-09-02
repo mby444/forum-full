@@ -27,10 +27,12 @@ function SignupOtpResend({ countdown = 0 }) {
 }
 
 export default function SignupOtp() {
-    const { signupOtp } = useSignupOtp();
+    const { signupOtp, validate, submitForm } = useSignupOtp();
 
     const handleClickBtn = () => {
-
+        validate(() => {
+            submitForm();
+        });
     };
 
     return (

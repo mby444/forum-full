@@ -20,3 +20,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 Route::post("/signup", [SignController::class, "signup"])->middleware("signup");
 Route::post("/signup/otp", [SignController::class, "signupOtp"])->middleware("signup.otp");
+Route::delete("/signup/otp/{otp:email}", [SignController::class, "deleteSignupOtp"]);

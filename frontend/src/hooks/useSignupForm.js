@@ -54,29 +54,30 @@ export default function useSignupForm() {
     }
 
     const errorMessageGenerator = {
-        emailError(value = signupForm.email) {
+        emailError(value = trimExtraSpace(signupForm.email)) {
             const emailRegex = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
             return value.length === 0 ? "*Email harus diisi"
                 : !emailRegex.test(value) ? "*Email tidak valid"
                 : "";
         },
 
-        nameError(value = signupForm.name) {
+        nameError(value = trimExtraSpace(signupForm.name)) {
             const nameRegex = /[a-zA-Z ]+/;
             return value.length === 0 ? "*Nama wajib diisi"
                 : !nameRegex.test(value) ? "Nama tidak valid"
                 : "";
         },
 
-        passwordError(value = signupForm.password) {
+        passwordError(value = trimExtraSpace(signupForm.password)) {
             return value.length === 0 ? "*Password harus diisi"
                 : /\s/g.test(value) ? "*Password tidak boleh menggunakan spasi"
                 : value.length < 8 ? "*Password minimal 8 karakter"
                 : "";
         },
 
-        cpasswordError(value = signupForm.cpassword) {
+        cpasswordError(value = trimExtraSpace(signupForm.cpassword)) {
             return value.length === 0 ? "*Konfirmasi password harus diisi"
+                : value !== signupForm.password ? "*Konfirmasi password harus sama dengan password"
                 : /\s/g.test(value) ? "*Konfirmasi password tidak boleh menggunakan spasi"
                 : value.length < 8 ? "*Konfirmasi password minimal 8 karakter"
                 : "";

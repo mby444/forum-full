@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { mainAPI } from "../api/axios";
 
 export default function useSignupOtp() {
     const navigate = useNavigate();
-    const [cookies, setCookie] = useCookies(["temp_user_data"]);
+    const [cookies, setCookie, deleteCookie] = useCookies(["temp_user_data"]);
     const [otpInput, setOtpInput] = useState("");
     const [otpError, setOtpError] = useState("");
     const signupOtp = {
@@ -14,6 +14,16 @@ export default function useSignupOtp() {
         setOtp: setOtpInput,
         setOtpError,
     }
+
+    const redirectWhenExpired = (callback = Function()) => {
+        const isCookieExists = !!cookies.temp_user_data;
+        if (!isCookieExists) return navigate("../../signup");
+        callback(null);
+    };
+
+    useEffect(() => {
+        redirectWhenExpired();
+    }, []);
 
     const trimExtraSpace = (value = "") => {
         return value.trim().split(" ").filter((v) => v !== "").join(" ");
@@ -29,12 +39,42 @@ export default function useSignupOtp() {
         return output;
     };
 
-    const submitForm = () => {
-        const payload = {
-            ...getCookieData(),
-            otp: otpInput,
-        };
+    const validate = (callback = Function(), errCallback = Function()) => {
+        redirectWhenExpired();
+        const otp = trimExtraSpace(otpInput);
+        const errorMessage = otp.length === 0 ? "Kode OTP harus diisi" :
+            otp.length !== 6 ? "Kode OTP harus 6 digit angka" : "";
+        const isError = Boolean(errorMessage);
+        if (isError) setOtpError(errorMessage);
+        !isError ? callback() : errCallback(errorMessage);
     };
 
-    return { signupOtp, submitForm };
+    const deleteOtpRecord = (email) => mainAPI.delete(`/api/signup/otp/${email}`);
+
+    const submitForm = () => {
+        const cookieData = getCookieData();
+        const payload = {
+            ...cookieData,
+            otp: trimExtraSpace(otpInput),
+        };
+
+        if (!cookieData.email) return navigate("../../signup");
+
+        mainAPI.post("/api/signup/otp", payload).then(async (response) => {
+            const { data } = response;
+
+            const end = async (navigateTo = "/") => {
+                await deleteOtpRecord(cookieData.email);
+                deleteCookie("temp_user_data");
+                return navigate(navigateTo);
+            };
+
+            if (data?.shouldRedirect) return end("../../signup");
+            if (data?.error?.otp) return setOtpError(data?.error?.otp ?? "");
+            
+            end("/");
+        });
+    };
+
+    return { signupOtp, validate, submitForm };
 }

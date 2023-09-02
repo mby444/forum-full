@@ -32,9 +32,26 @@ class SignController extends Controller
     }
 
     public function signupOtp(Request $request) {
+        $email = strip_tags($request->post("email"));
+        $name = strip_tags($request->post("name"));
+        $password = strip_tags($request->post("password"));
+
+        Member::create([
+            "email" => $email,
+            "name" => $name,
+            "password" => $password,
+        ]);
+
         return response()->json([
             "error" => null,
-            "otpExpireDate" => "",
+        ]);
+    }
+
+    public function deleteSignupOtp(Otp $otp) {
+        $deleted = $otp->delete();
+        return response()->json([
+            "error" => null,
+            "deleted" => $deleted,
         ]);
     }
 

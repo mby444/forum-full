@@ -16,16 +16,35 @@ class ValidateSignupOtp
      */
     public function handle(Request $request, Closure $next): Response
     {
+        $email = strip_tags($request->post("email"));
         $otp = strip_tags($request->post("otp"));
-        $emailCookie = $request->cookie("otp_email");
-        $savedOtp = Otp::where("otp", $otp)->get();
+        $savedOtp = Otp::where("email", $email)->where("otp", $otp)->get();
+        $errorData = $this->getErrorData($email, $savedOtp);
+        $errorMessage = $errorData["error"]["otp"];
+        $shouldRedirect = $errorData["shouldRedirect"];
+        $isDataError = !!strlen($errorMessage);
 
-        if (!count($savedOtp)) {
-            return response()->json([
-                "error" => "Kode OTP salah"
-            ]);
-        }
+        if ($shouldRedirect || $isDataError) return response()->json([
+            "error" => [
+                "otp" => $errorMessage,
+            ],
+            "shouldRedirect" => $shouldRedirect,
+        ]);
 
         return $next($request);
+    }
+
+    private function getErrorData($email, $savedOtp) {
+        $errorObj = ["error" => ["otp" => ""], "shouldRedirect" => false];
+
+        if (!strlen($email)) {
+            $errorObj["error"]["otp"] = "Sesi sudah kadaluwarsa";
+            $errorObj["shouldRedirect"] = true;
+        }
+        elseif (!count($savedOtp)) {
+            $errorObj["error"]["otp"] = "Kode OTP salah";
+        }
+
+        return $errorObj;
     }
 }
