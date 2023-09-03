@@ -150,8 +150,9 @@ export default function useSignupForm() {
             const errorData = data?.error;
             const isError = errorData?.email || errorData?.name;
             if (isError) return setPostErrors(errorData);
-            saveOtpCookie(data?.cookie);
-            navigate("./otp/")
+            // saveOtpCookie(data?.token);
+            setCookie("temp_user_data", data?.token ?? "");
+            navigate("./otp/");
         }).catch((err) => {
             console.log(err);
         });

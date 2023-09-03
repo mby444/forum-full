@@ -5,7 +5,7 @@ import { mainAPI } from "../api/axios";
 
 export default function useSignupOtp() {
     const navigate = useNavigate();
-    const [cookies, setCookie, deleteCookie] = useCookies(["temp_user_data"]);
+    const [cookies, setCookie, deleteCookie] = useCookies(["temp_user_data", "user_data"]);
     const [otpInput, setOtpInput] = useState("");
     const [otpError, setOtpError] = useState("");
     const signupOtp = {
@@ -49,27 +49,28 @@ export default function useSignupOtp() {
         !isError ? callback() : errCallback(errorMessage);
     };
 
-    const deleteOtpRecord = (email) => mainAPI.delete(`/api/signup/otp/${email}`);
+    const deleteOtpRecord = (token) => mainAPI.delete(`/api/signup/otp/${token}`);
 
     const submitForm = () => {
-        const cookieData = getCookieData();
+        // const cookieData = getCookieData();
+        const cookieToken = cookies.temp_user_data ?? "";
         const payload = {
-            ...cookieData,
+            token: cookieToken,
             otp: trimExtraSpace(otpInput),
         };
 
-        if (!cookieData.email) return navigate("../../signup");
+        if (!cookieToken) return navigate("../../signup");
 
         mainAPI.post("/api/signup/otp", payload).then(async (response) => {
             const { data } = response;
 
             const end = async (navigateTo = "/") => {
-                await deleteOtpRecord(cookieData.email);
+                await deleteOtpRecord(cookieToken);
                 deleteCookie("temp_user_data");
                 return navigate(navigateTo);
             };
 
-            if (data?.shouldRedirect) return end("../../signup");
+            if (data?.shouldRedirect) return await end("../../signup");
             if (data?.error?.otp) return setOtpError(data?.error?.otp ?? "");
             
             end("/");

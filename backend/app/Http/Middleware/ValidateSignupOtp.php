@@ -16,10 +16,11 @@ class ValidateSignupOtp
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $email = strip_tags($request->post("email"));
+        // $email = strip_tags($request->post("email"));
+        $token = strip_tags($request->post("token"));
         $otp = strip_tags($request->post("otp"));
-        $savedOtp = Otp::where("email", $email)->where("otp", $otp)->get();
-        $errorData = $this->getErrorData($email, $savedOtp);
+        $savedOtp = Otp::where("token", $token)->where("otp", $otp)->get();
+        $errorData = $this->getErrorData($token, $savedOtp);
         $errorMessage = $errorData["error"]["otp"];
         $shouldRedirect = $errorData["shouldRedirect"];
         $isDataError = !!strlen($errorMessage);
@@ -34,10 +35,10 @@ class ValidateSignupOtp
         return $next($request);
     }
 
-    private function getErrorData($email, $savedOtp) {
+    private function getErrorData($token, $savedOtp) {
         $errorObj = ["error" => ["otp" => ""], "shouldRedirect" => false];
 
-        if (!strlen($email)) {
+        if (!strlen($token)) {
             $errorObj["error"]["otp"] = "Sesi sudah kadaluwarsa";
             $errorObj["shouldRedirect"] = true;
         }
